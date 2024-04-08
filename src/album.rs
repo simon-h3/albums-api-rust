@@ -1,4 +1,7 @@
 use actix_web::{get, post, web, delete, HttpResponse};
+use actix_web::cookie::time::format_description::parse;
+use actix_web::web::Json;
+use serde_derive::{Deserialize, Serialize};
 use serde_json::from_str;
 use crate::comment::Comment;
 
@@ -20,6 +23,7 @@ pub struct Track{
     pub length: u32,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Album{
     pub albumId: u32,
     pub name: String,
@@ -30,7 +34,6 @@ pub struct Album{
     pub rating: u8,
     pub comments: String //Vec<Comment>
 }
-
 impl Album{
     fn new(albumId: u32, name: String, tracks: u32, artists: String, genres: String, year: u16, rating :u8, comments: String) -> Album{
         let album: Album = Album {albumId, name, tracks, artists, genres, year, rating, comments};
@@ -49,13 +52,10 @@ impl AlbumRequest {
         match &self.message {
             Some(message) => {
                 let parsed_message = from_str(&message)?;
-
-                Some(Album::new(parsed_message.);
-
+                Some(Album::new(parsed_message["albumId"], parsed_message["name"], parsed_message["tracks"], parsed_message["artist"], parsed_message["genre"], parsed_message["year"], parsed_message["rating"], parsed_message["comment"]))
             }
             None => None,
             }
-        }
     }
 }
 
@@ -69,11 +69,8 @@ pub async fn get_top_albums() -> HttpResponse {
 
 // POST, create album
 #[post("/albums")]
-pub async fn create_album(album_req: ) -> HttpResponse {
-
-    Album::new()
-
-    return HttpResponse::Ok().body("create album: TBD"); //TODO: implement album structure
+pub async fn create_album(album_req: Json<AlbumRequest>) -> HttpResponse {
+    return HttpResponse::Created().json(album_req.to_album()); //TODO: implement album structure
 }
 
 // GET, get album

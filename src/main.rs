@@ -1,9 +1,9 @@
 use std::env;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use actix_web::middleware::Logger;
-use std::io::Result;
-use rusqlite::{Connection};
-use rusqlite::NO_PARAMS;
+// use std::io::Result;
+use rusqlite::{Connection, Result};
+// use rusqlite::NO_PARAMS;
 
 mod album;
 mod comment;
