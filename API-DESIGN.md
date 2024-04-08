@@ -33,13 +33,18 @@
 `
 
 JSON:
-
+`
 {
     "albumId": 0,
-    "name": "name_here",
-
-
+    "name": "Rust In Peace",
+    "tracks": 12,
+    "artist": "Megadeth",
+    "genre": "Metal",
+    "year": "1992",
+    "rating": 9,
+    "comment": "Thrash masterpiece!"
 }
+`
 # CURL Examples
 
 
