@@ -38,3 +38,22 @@ To get started with this project, follow the steps below:
 - Rusqlite - A library that provides a simple way to interface with SQLite databases in Rust.
 - Serde - Json shenanigans.
 
+# CURL Examples
+`
+curl --location 'localhost:8080/albums/0'
+`
+
+`
+curl --location 'localhost:8080/albums' \
+--header 'Content-Type: application/json' \
+--data '{
+    "album_id": 0,
+    "name": "Rust In Peace",
+    "tracks": 12,
+    "artists": "Megadeth",
+    "genres": "Metal",
+    "year": 1992,
+    "rating": 9,
+    "comment": "Thrash masterpiece!"
+}'
+`
