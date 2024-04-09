@@ -28,7 +28,8 @@
     rating  - integer (u8)
     comment - String  (TEXT) 
 
-`CREATE TABLE IF NOT EXISTS Albums (albumId INTEGER NOT NULL, name TEXT NOT NULL, tracks INTEGER, artist TEXT, genre TEXT, 
+`
+CREATE TABLE IF NOT EXISTS Albums (albumId INTEGER NOT NULL, name TEXT NOT NULL, tracks INTEGER, artist TEXT, genre TEXT, 
     year INTEGER, rating INTEGER, comment TEXT, PRIMARY KEY (albumId))
 `
 

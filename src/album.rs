@@ -1,4 +1,4 @@
-use actix_web::{get, post, web, delete, HttpResponse};
+use actix_web::{delete, get, post, web, HttpResponse, Responder};
 use actix_web::cookie::time::format_description::parse;
 use actix_web::web::Json;
 use serde_derive::{Deserialize, Serialize};
@@ -34,6 +34,7 @@ pub struct Album{
     pub rating: u8,
     pub comments: String //Vec<Comment>
 }
+
 impl Album{
     fn new(albumId: u32, name: String, tracks: u32, artists: String, genres: String, year: u16, rating :u8, comments: String) -> Album{
         let album: Album = Album {albumId, name, tracks, artists, genres, year, rating, comments};
@@ -55,19 +56,6 @@ pub struct AlbumRequest {
     pub comments: String    //Vec<Comment>
 }
 
-impl AlbumRequest {
-    pub fn to_album(&self) -> Option<Album> {
-        match &self.message {
-            Some(message) => {
-                let parsed_message: Value = from_str(&message).ok()?;
-                // parsed_message.get("albumId")
-                let albumId = parsed_message.get("albumId") as u32;
-                Some(Album::new(parsed_message["albumId"], parsed_message["name"], parsed_message["tracks"], parsed_message["artist"], parsed_message["genre"], parsed_message["year"], parsed_message["rating"], parsed_message["comment"]))
-            }
-            None => None,
-            }
-    }
-}
 
 // pub type album_db = Response<Vec<Album>>; // get all albums
 
@@ -77,10 +65,19 @@ pub async fn get_top_albums() -> HttpResponse {
     return HttpResponse::Ok().body("top albums: TBD"); //TODO: implement album structure
 }
 
-// POST, create album
 #[post("/albums")]
-pub async fn create_album(album_req: Json<AlbumRequest>) -> HttpResponse {
-    return HttpResponse::Created().json(album_req.to_album()); //TODO: implement album structure
+async fn create_album(album: web::Json<Album>) -> impl Responder {
+    // Process the incoming album data
+    let album: Album = album.into_inner();
+    save_album_data(&album).await;
+
+    HttpResponse::Created().json(album)
+}
+
+async fn save_album_data(album: &Album) {
+    // SQLITE CALL...
+
+    println!("Saving album: {:?}", album);
 }
 
 // GET, get album
