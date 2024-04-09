@@ -8,7 +8,7 @@ use rusqlite::{Connection, Result};
 mod album;
 mod comment;
 
-fn db_test() -> Result<()> {
+fn db_test() -> std::io::Result<()> {
     let conn = Connection::open("albums.db")?;
 
     conn.execute("CREATE TABLE IF NOT EXISTS Albums (albumId INTEGER NOT NULL, name TEXT NOT NULL,
@@ -19,7 +19,7 @@ fn db_test() -> Result<()> {
 }
 
 #[actix_web::main]
-async fn main() -> Result<()> {
+async fn main() -> std::io::Result<()> {    // different 'Result'
     env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
 
     db_test()?;

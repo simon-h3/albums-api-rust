@@ -2,7 +2,7 @@ use actix_web::{get, post, web, delete, HttpResponse};
 use actix_web::cookie::time::format_description::parse;
 use actix_web::web::Json;
 use serde_derive::{Deserialize, Serialize};
-use serde_json::from_str;
+use serde_json::{from_str, Value};
 use crate::comment::Comment;
 
 pub struct Genre{
@@ -44,14 +44,24 @@ impl Album{
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AlbumRequest {
-    pub message: Option<String>,
+    // pub message: Option<String>,
+    pub albumId: u32,
+    pub name: String,
+    pub tracks: u32,        // Vec<Track>
+    pub artists: String,    //Vec<Artist>,
+    pub genres: String,     //Vec<Genre>,
+    pub year: u16,
+    pub rating: u8,
+    pub comments: String    //Vec<Comment>
 }
 
 impl AlbumRequest {
     pub fn to_album(&self) -> Option<Album> {
         match &self.message {
             Some(message) => {
-                let parsed_message = from_str(&message)?;
+                let parsed_message: Value = from_str(&message).ok()?;
+                // parsed_message.get("albumId")
+                let albumId = parsed_message.get("albumId") as u32;
                 Some(Album::new(parsed_message["albumId"], parsed_message["name"], parsed_message["tracks"], parsed_message["artist"], parsed_message["genre"], parsed_message["year"], parsed_message["rating"], parsed_message["comment"]))
             }
             None => None,
