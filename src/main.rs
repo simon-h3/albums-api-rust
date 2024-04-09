@@ -10,6 +10,9 @@ mod sql_proxy;
 async fn main() -> std::io::Result<()> {    // different 'Result'
     env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
 
+    println!("Starting server...");
+
+    sql_proxy::delete_album_table().expect("Failed to delete database");
     sql_proxy::create_album_table().expect("Failed to create database");
 
     HttpServer::new(|| {

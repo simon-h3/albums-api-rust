@@ -19,7 +19,7 @@
 # SQLite Data
 
 **Album:**
-    albumId      - integer (u32)
+    album_id      - integer (u32)
     name    - String  (TEXT)
     tracks  - integer (u32)
     artist  - String  (TEXT)
@@ -29,8 +29,8 @@
     comment - String  (TEXT) 
 
 `
-CREATE TABLE IF NOT EXISTS Albums (albumId INTEGER NOT NULL, name TEXT NOT NULL, tracks INTEGER, artist TEXT, genre TEXT, 
-    year INTEGER, rating INTEGER, comment TEXT, PRIMARY KEY (albumId))
+CREATE TABLE IF NOT EXISTS Albums (album_id INTEGER NOT NULL, name TEXT NOT NULL, tracks INTEGER, artist TEXT, genre TEXT, 
+    year INTEGER, rating INTEGER, comment TEXT, PRIMARY KEY (album_id))
 `
 
 JSON:
@@ -47,5 +47,21 @@ JSON:
 }
 `
 # CURL Examples
+`
+curl --location 'localhost:8080/albums/0'
+`
 
-
+`
+curl --location 'localhost:8080/albums' \
+--header 'Content-Type: application/json' \
+--data '{
+    "album_id": 0,
+    "name": "Rust In Peace",
+    "tracks": 12,
+    "artists": "Megadeth",
+    "genres": "Metal",
+    "year": 1992,
+    "rating": 9,
+    "comment": "Thrash masterpiece!"
+}'
+`
