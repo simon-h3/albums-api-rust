@@ -13,7 +13,7 @@ To get started with this project, follow the steps below:
 
 4. Start the server by running:
 
-    `cargo run`
+   `cargo run`
 
 5. The API will be available at http://localhost:8080.
 
