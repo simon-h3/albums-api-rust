@@ -1,9 +1,7 @@
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
-use actix_web::cookie::time::format_description::parse;
-use actix_web::web::Json;
 use serde_derive::{Deserialize, Serialize};
-use serde_json::{from_str, Value};
-use crate::comment::Comment;
+
+use crate::sql_proxy;
 
 pub struct Genre{
     pub id: u32,
@@ -25,19 +23,19 @@ pub struct Track{
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Album{
-    pub albumId: u32,
+    pub album_id: u32,
     pub name: String,
     pub tracks: u32, // Vec<Track>
     pub artists: String, //Vec<Artist>,
     pub genres: String, //Vec<Genre>,
     pub year: u16,
     pub rating: u8,
-    pub comments: String //Vec<Comment>
+    pub comment: String //Vec<Comment>
 }
 
 impl Album{
-    fn new(albumId: u32, name: String, tracks: u32, artists: String, genres: String, year: u16, rating :u8, comments: String) -> Album{
-        let album: Album = Album {albumId, name, tracks, artists, genres, year, rating, comments};
+    fn new(album_id: u32, name: String, tracks: u32, artists: String, genres: String, year: u16, rating :u8, comment: String) -> Album{
+        let album: Album = Album {album_id, name, tracks, artists, genres, year, rating, comment};
 
         return album;
     }
@@ -46,7 +44,7 @@ impl Album{
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AlbumRequest {
     // pub message: Option<String>,
-    pub albumId: u32,
+    pub album_id: u32,
     pub name: String,
     pub tracks: u32,        // Vec<Track>
     pub artists: String,    //Vec<Artist>,
@@ -68,6 +66,7 @@ pub async fn get_top_albums() -> HttpResponse {
 #[post("/albums")]
 async fn create_album(album: web::Json<Album>) -> impl Responder {
     // Process the incoming album data
+    print!("Creating album: {:?}", album);
     let album: Album = album.into_inner();
     save_album_data(&album).await;
 
@@ -77,18 +76,20 @@ async fn create_album(album: web::Json<Album>) -> impl Responder {
 async fn save_album_data(album: &Album) {
     // SQLITE CALL...
 
+    sql_proxy::insert_album(album).expect("Failed to insert album");
+
     println!("Saving album: {:?}", album);
 }
 
 // GET, get album
 #[get("/albums/{id}")]
-pub async fn get_album(id: web::Path<u32>) -> HttpResponse {
+pub async fn get_album(_id: web::Path<u32>) -> HttpResponse {
     return HttpResponse::Ok().body("get album: TBD"); //TODO: implement album structure
 }
 
 // DELETE, delete album
 #[delete("/albums/{id}")]
-pub async fn delete_album(id: web::Path<u32>) -> HttpResponse {
+pub async fn delete_album(_id: web::Path<u32>) -> HttpResponse {
     return HttpResponse::Ok().body("delete album: TBD"); //TODO: implement album structure
 }
 
