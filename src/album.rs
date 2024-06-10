@@ -26,12 +26,12 @@ pub struct Track{
 pub struct Album{
     pub album_id: u32,
     pub name: String,
-    pub tracks: u32, // Vec<Track>
-    pub artists: String, //Vec<Artist>,
-    pub genres: String, //Vec<Genre>,
+    pub tracks: u32,        // Vec<Track>
+    pub artists: String,    //Vec<Artist>,
+    pub genres: String,     //Vec<Genre>,
     pub year: u16,
     pub rating: u8,
-    pub comment: String //Vec<Comment>
+    pub comment: String     //Vec<Comment>
 }
 
 impl Album{

@@ -1,8 +1,17 @@
 use rusqlite::{params, Connection, Result};
-use crate::album::Album;
+use crate::album::{self, Album};
+
+/*
+    Get Top Albums (Rank Ratings)
+
+    SELECT * FROM Albums SORT Rating Descending LIMIT 10
+
+*/
+
+pub const PATH: &str = "albums.db";
 
 pub fn delete_album_table() -> Result<()> {
-    let conn = Connection::open("albums.db")?;
+    let conn = Connection::open(PATH)?;
 
     conn.execute("DROP TABLE IF EXISTS Albums", ())?;
 
@@ -11,7 +20,7 @@ pub fn delete_album_table() -> Result<()> {
 
 
 pub fn create_album_table() -> Result<()> {
-    let conn = Connection::open("albums.db")?;
+    let conn = Connection::open(PATH)?;
 
     conn.execute("CREATE TABLE IF NOT EXISTS Albums (album_id INTEGER NOT NULL, name TEXT NOT NULL,
         tracks INTEGER, artist TEXT, genre TEXT, year INTEGER, rating INTEGER, comment TEXT,
@@ -21,7 +30,7 @@ pub fn create_album_table() -> Result<()> {
 }
 
 pub fn insert_album(album: &Album) -> Result<()> {
-    let conn = Connection::open("albums.db")?;
+    let conn = Connection::open(PATH)?;
 
     let stmt: String = format!("INSERT INTO Albums (album_id, name, tracks, artist, genre, year, rating, comment) 
         VALUES ({}, '{}', {}, '{}', '{}', {}, {}, '{}')",
@@ -34,7 +43,7 @@ pub fn insert_album(album: &Album) -> Result<()> {
 
 pub async fn get_album_by_id(album_id: u32) -> Result<Album> {
 
-    let conn: Connection = Connection::open("albums.db")?;
+    let conn: Connection = Connection::open(PATH)?;
 
     let mut stmt = conn.prepare("SELECT * FROM albums WHERE album_id = ?")?;
     
@@ -52,4 +61,12 @@ pub async fn get_album_by_id(album_id: u32) -> Result<Album> {
     })?;
 
     Ok(album)
+}
+
+pub async fn get_top_albums() -> Result<Vec<Album>> {
+    let albums: Vec<Album> = vec![]; // assign empty
+
+    let conn: Connection = Connection::open()
+
+    Ok(albums)
 }
