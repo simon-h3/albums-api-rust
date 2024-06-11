@@ -27,6 +27,6 @@ async fn main() -> std::io::Result<()> {    // different 'Result'
             .service(comment::delete_comment)
     })
     .bind(("127.0.0.1", 8080))?
-    .run();
+    .run()
     .await
 }

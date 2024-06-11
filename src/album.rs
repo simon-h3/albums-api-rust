@@ -42,14 +42,18 @@ impl Album{
     }
 }
 
-// pub type album_db = Response<Vec<Album>>; // get all albums
-
 // GET, get best albums
 #[get("/albums")]
 pub async fn get_top_albums() -> HttpResponse {
-    return HttpResponse::Ok().body("top albums: TBD"); //TODO: implement album structure
+    println!("Retrieving top albums...\n");
+
+    let albums = sql_proxy::get_top_albums().await.expect("Big Uh OH!");
+    HttpResponse::Ok().json(albums)
 }
 
+/* 
+    web::Json<Album> is a JSON object that implements the Deserialize trait
+*/
 #[post("/albums")]
 async fn create_album(album: web::Json<Album>) -> impl Responder {
     // Process the incoming album data
@@ -68,6 +72,7 @@ async fn create_album(album: web::Json<Album>) -> impl Responder {
 async fn save_album_data(album: &Album) {
     // SQLITE CALL...
 
+    // TODO: potential sanitation of album text, character ' caused a crash.
     sql_proxy::insert_album(album).expect("Failed to insert album");
 }
 

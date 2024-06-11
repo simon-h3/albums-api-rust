@@ -1,12 +1,5 @@
 use rusqlite::{params, Connection, Result};
-use crate::album::{self, Album};
-
-/*
-    Get Top Albums (Rank Ratings)
-
-    SELECT * FROM Albums SORT Rating Descending LIMIT 10
-
-*/
+use crate::album::Album;
 
 pub const PATH: &str = "albums.db";
 
@@ -64,9 +57,28 @@ pub async fn get_album_by_id(album_id: u32) -> Result<Album> {
 }
 
 pub async fn get_top_albums() -> Result<Vec<Album>> {
-    let albums: Vec<Album> = vec![]; // assign empty
+    let mut albums: Vec<Album> = vec![]; // assign empty
 
-    let conn: Connection = Connection::open()
+    let conn: Connection = Connection::open(PATH)?;
+
+    let mut stmt = conn.prepare("SELECT * FROM Albums ORDER BY rating DESC LIMIT 3;")?;
+
+    let albums_iter = stmt.query_map([], |row| {
+        Ok(Album {
+            album_id: row.get(0)?,
+            name: row.get(1)?,
+            tracks: row.get(2)?,
+            artists: row.get(3)?,
+            genres: row.get(4)?,
+            year: row.get(5)?,
+            rating: row.get(6)?,
+            comment: row.get(7)?,
+        })
+    })?;
+
+    for album in albums_iter {
+        albums.push(album?);
+    }
 
     Ok(albums)
 }
