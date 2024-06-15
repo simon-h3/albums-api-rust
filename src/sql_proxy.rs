@@ -11,7 +11,6 @@ pub fn delete_album_table() -> Result<()> {
     Ok(())
 }
 
-
 pub fn create_album_table() -> Result<()> {
     let conn = Connection::open(PATH)?;
 

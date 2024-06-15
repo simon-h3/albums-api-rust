@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  
+  .album-list, .album-details, .comments {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .album-list ul, .comments ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .album-list li, .comments li {
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .album-list li:hover, .comments li:hover {
+    background-color: #f2f2f2;
+  }
