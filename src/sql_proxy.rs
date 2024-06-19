@@ -3,6 +3,80 @@ use crate::album::Album;
 
 pub const PATH: &str = "albums.db";
 
+pub const CREATE_ALBUM_TABLE: &str = "CREATE TABLE Albums (\
+                                    album_id INTEGER NOT NULL,\
+                                    name TEXT NOT NULL,\
+                                    year INTEGER,\
+                                    rating INTEGER,\
+                                    comment TEXT,\
+                                    PRIMARY KEY (album_id)\
+                                    )";
+
+pub const CREATE_TRACK_TABLE: &str = "CREATE TABLE Tracks (track_id INTEGER NOT NULL,\
+                                    album_id INTEGER REFERENCES Albums(album_id),\
+                                    name TEXT NOT NULL,\
+                                    duration INTEGER, PRIMARY KEY (track_id))"; // UNIX TIME (SQLITE doesn't support 'TIME' type)
+
+pub const CREATE_GENRES_TABLE: &str = "CREATE TABLE Genres (genre_id INTEGER NOT NULL,\
+                                    name TEXT NOT NULL,\
+                                    PRIMARY KEY (genre_id)\
+                                    )";
+
+pub const CREATE_COMMENTS_TABLE: &str = "CREATE TABLE Comments (comment_id TEXT NOT NULL,\
+                                        album_id INTEGER REFERENCES Albums(album_id),\
+                                        comment TEXT NOT NULL,\
+                                        created_at INTEGER,\
+                                        PRIMARY KEY (comment_id)\
+                                        )";
+
+pub const ALBUM_ARTIST: &str = "CREATE TABLE Album_Artist (\
+                                album_id INTEGER REFERENCES Albums(album_id),\
+                                artist_id INTEGER REFERENCES Artists(artist_id),\
+                                PRIMARY KEY (album_id, artist_id)\
+                                )";
+
+pub const ALBUM_GENRES: &str = "CREATE TABLE Album_Genres (
+                                album_id INTEGER REFERENCES Albums(album_id),
+                                genre_id INTEGER REFERENCES Genres(genre_id),
+                                PRIMARY KEY (album_id, genre_id)
+                                );";
+
+pub const ALBUM_TRACKS: &str = "CREATE TABLE Album_Tracks (
+                                album_id INTEGER REFERENCES Albums(album_id),
+                                track_id INTEGER REFERENCES Tracks(track_id),
+                                PRIMARY KEY (album_id, track_id)
+                                );";
+
+/*
+
+TODO: Modify sql inserts.
+
+Example Inserts
+
+-- Insert an album
+INSERT INTO Albums (name, year, rating, comment) VALUES ('Album 1', 2022, 8, 'Great album!');
+
+-- Insert a track
+INSERT INTO Tracks (album_id, name, duration) VALUES (1, 'Track 1', '00:03:45');
+
+-- Insert an artist
+INSERT INTO Artists (name) VALUES ('Artist 1');
+
+-- Link artist to album
+INSERT INTO Album_Artists (album_id, artist_id) VALUES (1, 1);
+
+-- Insert a genre
+INSERT INTO Genres (name) VALUES ('Rock');
+
+-- Link genre to album
+INSERT INTO Album_Genres (album_id, genre_id) VALUES (1, 1);
+
+-- Insert a comment
+INSERT INTO Comments (album_id, comment) VALUES (1, 'Loved this track!');
+
+
+ */
+
 pub fn delete_album_table() -> Result<()> {
     let conn = Connection::open(PATH)?;
 
@@ -17,6 +91,12 @@ pub fn create_album_table() -> Result<()> {
     conn.execute("CREATE TABLE IF NOT EXISTS Albums (album_id INTEGER NOT NULL, name TEXT NOT NULL,
         tracks INTEGER, artist TEXT, genre TEXT, year INTEGER, rating INTEGER, comment TEXT,
         PRIMARY KEY (album_id))", ())?;
+
+    Ok(())
+}
+
+pub fn construct_database() -> Result<()>{
+
 
     Ok(())
 }

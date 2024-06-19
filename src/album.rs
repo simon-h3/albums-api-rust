@@ -5,17 +5,17 @@ use serde_derive::{Deserialize, Serialize};
 use crate::sql_proxy;
 
 pub struct Genre{
-    pub id: u32,
+    pub genre_id: u32,
     pub name: String,
 }
 
 pub struct Artist{
-    pub id: u32,
+    pub artist_id: u32,
     pub name: String,
 }
 
 pub struct Track{
-    pub id: u32,
+    pub track_id: u32,
     pub name: String,
     pub artists: Vec<Artist>,
     pub genres: Vec<Genre>,
@@ -33,6 +33,19 @@ pub struct Album{
     pub rating: u8,
     pub comment: String     //Vec<Comment>
 }
+/*
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Album{
+    pub album_id: u32,
+    pub name: String,
+    pub tracks: Vec<Track>,
+    pub artists: Vec<Artist>,
+    pub genres: Vec<Genre>,
+    pub year: u16,
+    pub rating: u8,
+    pub comment: Vec<Comment>
+}
+ */
 
 impl Album{
     fn new(album_id: u32, name: String, tracks: u32, artists: String, genres: String, year: u16, rating :u8, comment: String) -> Album{

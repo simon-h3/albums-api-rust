@@ -5,7 +5,6 @@ pub struct Comment{
     pub user_id: i32,
     pub time_created: DateTime<Utc>,
     pub text: String,
-
 }
 
 // GET, list comments from album ID
